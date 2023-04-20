@@ -1,8 +1,9 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    let lastSlide = AppStrings.onboardingMessages.count
+    let lastSlide = AppStrings.onboardingMessages.count - 1
     @State var currentSlide = 0
+    @Binding var currentView: AppView
     
     var body: some View {
         VStack {
@@ -17,7 +18,7 @@ struct OnboardingView: View {
             Text(AppStrings.onboardingMessages[currentSlide])
                 .padding(EdgeInsets(top: 0, leading: 100, bottom: 0, trailing: 100))
                 .font(.system(size: 36, weight: .medium, design: .rounded))
-            if currentSlide == lastSlide - 1 {
+            if currentSlide == lastSlide {
                 Button("Discover") {
                     withAnimation(.easeInOut(duration: 0.25), {
                         startInstrumentCreation()
@@ -34,7 +35,7 @@ struct OnboardingView: View {
                         })
                     }
                 }
-                if currentSlide < lastSlide - 1 {
+                if currentSlide < lastSlide {
                     Button("Next") {
                         withAnimation(.easeInOut(duration: 0.25), {
                             toNextSlide()
@@ -47,14 +48,18 @@ struct OnboardingView: View {
     }
     
     func toPreviousSlide() {
-        currentSlide -= 1
+        if currentSlide > 0 {
+            currentSlide -= 1
+        }
     }
     
     func toNextSlide() {
-        currentSlide += 1
+        if currentSlide < lastSlide {
+            currentSlide += 1
+        }
     }
     
     func startInstrumentCreation() {
-        
+        currentView = .instrumentCreation
     }
 }
